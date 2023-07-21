@@ -35,7 +35,7 @@ if __name__ == "__main__":
                 size += int(items[-1])
                 if items[-2] in status_codes:
                     status_codes[items[-2]] += 1
-            except e:
+            except:
                 pass
             if count == 9:
                 print_stats()
