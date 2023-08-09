@@ -2,34 +2,24 @@
 
 const request = require('request');
 
-function printMovieCharacters(movieId) {
-  const apiUrl = `https://swapi.dev/api/films/${movieId}/`;
-
-  request(apiUrl, (error, response, body) => {
-    if (!error && response.statusCode === 200) {
-      const movieData = JSON.parse(body);
-      const characterUrls = movieData.characters;
-
-      characterUrls.forEach((characterUrl) => {
-        request(characterUrl, (characterError, characterResponse, characterBody) => {
-          if (!characterError && characterResponse.statusCode === 200) {
-            const characterData = JSON.parse(characterBody);
-            const characterName = characterData.name;
-            console.log(characterName);
+const movieId = process.argv[2];
+const url = `https://swapi.dev/api/films/${movieId}/`;
+request(url, async function (error, response, body) {
+  if (error) {
+    console.log(error);
+  } else {
+    const characters = JSON.parse(body).characters;
+    for (const character of characters) {
+      const res = await new Promise((resolve, reject) => {
+        request(character, (error, res, html) => {
+          if (error) {
+            reject(error);
           } else {
-            console.log(`Failed to fetch character data for URL: ${characterUrl}`);
+            resolve(JSON.parse(html).name);
           }
         });
       });
-    } else {
-      console.log(`Failed to fetch movie data for ID: ${movieId}`);
+      console.log(res);
     }
-  });
-}
-
-const movieId = process.argv[2];
-if (!movieId) {
-  console.log("Please provide a movie ID.");
-} else {
-  printMovieCharacters(movieId);
-}
+  }
+});
