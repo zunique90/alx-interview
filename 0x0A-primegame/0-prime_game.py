@@ -2,23 +2,20 @@
 """Prime Game"""
 
 
+def getPrimeNumbers(num):
+    """returns list of prime numbers from 1 to num"""
+    primeNumbers = []
+    filtered = [True] * (num + 1)
+    for prime in range(2, num + 1):
+        if (filtered[prime]):
+            primeNumbers.append(prime)
+            for i in range(prime, num + 1, prime):
+                filtered[i] = False
+    return primeNumbers
+
+
 def isWinner(x, nums):
-    """Determines the winner of each game"""
-
-    def isPrime(num):
-        if num <= 1:
-            return False
-        for i in range(2, int(num**0.5) + 1):
-            if num % i == 0:
-                return False
-        return True
-
-    def getPrimeCount(num):
-        count = 0
-        for i in range(2, num + 1):
-            if isPrime(i):
-                count += 1
-        return count
+    """Determines the winner of Prime Game"""
 
     if x is None or nums is None or x == 0 or nums == []:
         return None
@@ -26,9 +23,8 @@ def isWinner(x, nums):
     maria_wins = 0
     ben_wins = 0
 
-    for num in nums:
-        primeCount = getPrimeCount(num)
-        if primeCount % 2 == 0:
+    for i in range(x):
+        if len(getPrimeNumbers(nums[i])) % 2 == 0:
             ben_wins += 1
         else:
             maria_wins += 1
@@ -37,5 +33,4 @@ def isWinner(x, nums):
         return "Maria"
     elif ben_wins > maria_wins:
         return "Ben"
-    else:
-        return None
+    return None
