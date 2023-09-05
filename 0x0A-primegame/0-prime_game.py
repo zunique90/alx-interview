@@ -1,5 +1,12 @@
+#!/usr/bin/python3
+"""Prime Game"""
+
+
 def isWinner(x, nums):
+    """Determines the winner of each game"""
+
     def isPrime(num):
+        """checks if a number is a prime number"""
         if num < 2:
             return False
         for i in range(2, int(num**0.5) + 1):
@@ -8,6 +15,7 @@ def isWinner(x, nums):
         return True
 
     def canWin(num):
+        """condition for the winner"""
         if num == 1:
             return False
         if num == 2 or num % 2 == 1:
